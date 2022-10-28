@@ -1,70 +1,74 @@
 //Remember these? We get references to the elements.
 let game = document.querySelector("#game");
-let score = document.querySelector("#score");
-
-let points = 0;
+let chicken = document.querySelector("#chicken");
+let pig = document. querySelector("#pig"); 
+let cow = document. querySelector("#cow"); 
 
 //This function returns a random integer [0...max)
-function random(max) {
+function random(max){
     return Math.floor(Math.random() * max);
 }
 
-//Call this function to set up one animal.
-//  animal: The button element for the animal
-//  moveTime: How many milliseconds to wait between each move
-//  runPercent: The % likelyhood the animal moves when you mouse over
-//  numPoints: the number of points you get for clicking it
-function setup(animal, moveTime, runPercent, numPoints) {
-
-    //In javascript you can define a function inside a function...
-    //It can only be used in this function (scope!)
-    function randomize() {
-        animal.style.top = random(game.offsetHeight - animal.offsetHeight) + "px";
-        animal.style.left = random(game.offsetWidth - animal.offsetWidth) + "px";
+//This function sets the position of the chicken to a random
+//place inside the game div
+function randomizechicken(){
+    chicken.style.top = random(game.offsetHeight - chicken.offsetHeight) + "px";
+    chicken.style.left = random(game.offsetWidth - chicken.offsetWidth) + "px";
+}
+function randomizepig(){
+    pig.style.top = random(game.offsetHeight - pig.offsetHeight) + "px";
+    pig.style.left = random(game.offsetWidth - pig.offsetWidth) + "px";
     }
 
-    //Every moveTime milliseconds, randomize the position
-    window.setInterval(randomize, moveTime);
+    function randomizecow(){
+        cow.style.top = random(game.offsetHeight - cow.offsetHeight) + "px";
+        cow.style.left = random(game.offsetWidth - cow.offsetWidth) + "px";
+        }
 
-    //On mouseOver, randomize the position, runPercent% of the time.
-    animal.addEventListener('mouseover', function () {
-        if (random(100) < runPercent) {
-            randomize();
+//Call this function when the player clicks the chicken
+function youWin(){
+    alert("Winner!");
+}
+
+//We've seen this before. Call the "youWin" function
+//whenever the user clicks the chicken
+chicken.addEventListener('click', youWin);
+pig.addEventListener('click', youWin);
+cow.addEventListener('click', youWin);
+
+
+//A new event lisener! "mouseover" happens when the MOUSE goes
+//OVER the element.
+//
+//Also: Peep the anonymous function we are passing in.
+chicken.addEventListener('mouseover', function(){
+    //When you get the mouse over the chicken there
+    //is an 80% chance the chicken moves before you
+    //can click it
+    if ( random(100) < 80 ){
+        randomizechicken();
+    }
+});
+pig.addEventListener('mouseover', function(){
+    //When you get the mouse over the pig there
+    //is an 80% chance the pig moves before you
+    //can click it
+    if ( random(100) < 90 ){
+    randomizepig();
+    }
+    });
+
+    cow.addEventListener('mouseover', function(){
+        //When you get the mouse over the cow there
+        //is an 80% chance the cow moves before you
+        //can click it
+        if ( random(100) < 80 ){
+            randomizecow();
         }
     });
 
-    //Randomize the position on startup
-    randomize();
-
-    //Assign points on every click
-    animal.addEventListener('click', function () {
-        points += numPoints;
-        score.innerText = points;
-    });
-}
-
-setup(document.querySelector("#pig"), 800, 90, 3);
-setup(document.querySelector("#chicken"), 1000, 80, 2);
-setup(document.querySelector("#cow"), 1200, 70, 1);
-
-let chickx = 0;
-let chicky = 0;
-let chickDx = 2;
-let chickDy = 2;
-let chick = document.querySelector("#chick");
-window.setInterval(function () {
-    chick.style.left = (chickx += chickDx) + "px";
-    chick.style.top = (chicky += chickDy) + "px";
-    if (chickx <= 0)
-        chickDx = 2;
-    if (chickx >= game.offsetWidth - chick.offsetWidth)
-        chickDx = -2;
-    if (chicky <= 0)
-        chickDy = 2;
-    if (chicky >= game.offsetHeight - chick.offsetHeight)
-        chickDy = -2;
-    if (random(200) == 2)
-        chickDy = chickDy * -1;
-    if (random(200) == 1)
-        chickDx = chickDx * -1;
-}, 10);
+//Another function the browser gives us!
+//Every 1000 miliseconds (1 second) move that bird
+window.setInterval(randomizechicken, 1000);
+window.setInterval(randomizepig, 800);
+window.setInterval(randomizecow, 1200);
